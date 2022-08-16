@@ -16,6 +16,13 @@ export interface IUser extends Document {
   isActive:boolean
 }
 
+export interface IResetCode extends Document {
+  resetCode:string;
+  email:string;
+  isVerified:boolean;
+  createdAt:string
+}
+
 export interface IReqAuth extends Request {
     user?: IUser;
   }

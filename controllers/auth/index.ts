@@ -7,6 +7,7 @@ import bcrypt from "bcryptjs";
 import { IUser } from "../../types";
 import sgMail from "@sendgrid/mail";
 import crypto from "crypto";
+import Code from "../../models/resetCode";
 
 // When User Try Register In Our Site Fire this function
 export const register = catchAsyncError(
@@ -60,6 +61,18 @@ export const register = catchAsyncError(
       .catch((error) => {
         console.error(error);
       });
+
+    const existingCode = await Code.findOne({ email }).select(
+      "-__v -createdAt -updatedAt"
+    );
+    if (existingCode) {
+      await Code.deleteOne({ email });
+      const saveCode = await new Code({ resetCode, email });
+      await saveCode.save();
+    } else {
+      const saveCode = await new Code({ resetCode, email });
+      await saveCode.save();
+    }
 
     res
       .cookie("token", token, {
@@ -125,6 +138,40 @@ export const logout = catchAsyncError(
         token: null,
         user: null,
       });
+  }
+);
+
+// Verify User Account
+export const verifyCode = catchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, resetCode } = req.body;
+
+    const code = await Code.findOne({ email });
+    console.log(code);
+    const user = await User.findOne({ email });
+    if (!user) return next(new ErrorHandler("Invalid Code", 400));
+    if (!code) {
+      return next(
+        new ErrorHandler(
+          "Invalid or expired reset code, Please try again.",
+          400
+        )
+      );
+    } else if (await code.comparetoken(resetCode, code.resetCode)) {
+      code.isVerified = true;
+      user.isActive = true;
+
+      await code.save();
+      await user.save();
+      res.json({ message: "Email Verify Successfully" });
+    } else {
+      return next(
+        new ErrorHandler(
+          "Invalid or expired reset code, Please try again.",
+          400
+        )
+      );
+    }
   }
 );
 

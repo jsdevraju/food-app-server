@@ -1,7 +1,7 @@
 import { Router } from "express";
 import Joi from "joi";
 import { createValidator } from "express-joi-validation";
-import { login, logout, register } from "../../controllers/auth";
+import { login, logout, register, verifyCode } from "../../controllers/auth";
 import { isAuthenticated } from "../../middleware/auth";
 
 const router = Router();
@@ -20,6 +20,7 @@ const loginSchema = Joi.object({
 
 router.post("/register", validator.body(registerSchema), register);
 router.post("/login", validator.body(loginSchema), login);
+router.post("/verify-email", isAuthenticated, verifyCode);
 router.get("/logout", isAuthenticated, logout);
 
 export default router;
