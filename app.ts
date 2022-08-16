@@ -24,10 +24,11 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Routes
+import auth from './routes/auth'
 
 
 // Routes Middleware
-// app.use("/api/v1/auth", auth);
+app.use("/api/v1/auth", auth);
 
 // Middleware Error Handler
 app.use(errorHandler);

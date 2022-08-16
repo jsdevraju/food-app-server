@@ -5,16 +5,16 @@ import ErrorHandler from "../../utils/errorHandler";
 import User from "../../models/user";
 import bcrypt from "bcryptjs";
 import { IUser } from "../../types";
-import { nanoid } from "nanoid";
 import sgMail from "@sendgrid/mail";
+import crypto from "crypto";
 
 // When User Try Register In Our Site Fire this function
 export const register = catchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     //get data from body
-    const { fullname, email, password } = req.body;
+    const { name, email, password } = req.body;
     //Generate a Random Code
-    const resetCode = nanoid(6).toUpperCase();
+    const resetCode = crypto.randomBytes(6).toString("base64");
     // Find or checking already any user extis with body email or not
     const user = await User.findOne({ email });
     if (user) return next(new ErrorHandler("User Already Exits", 400));
@@ -22,21 +22,21 @@ export const register = catchAsyncError(
     const passwordHash = await bcrypt.hash(password, 12);
     // if not create new user
     const newUser = new User({
-      fullname,
+      name,
       email,
       password: passwordHash,
     });
     // save the user and send db
     await newUser.save();
 
-     //without password updatedAt createdAt _v send response to client
-     const {
-        password: myPassword,
-        __v,
-        updatedAt,
-        createdAt,
-        ...userInfo
-      } = newUser._doc as IUser;
+    //without password updatedAt createdAt _v send response to client
+    const {
+      password: myPassword,
+      __v,
+      updatedAt,
+      createdAt,
+      ...userInfo
+    } = newUser._doc as IUser;
 
     // generate a token
     const token = generateToken({ id: newUser._id });
