@@ -1,10 +1,34 @@
 import { Router } from "express";
-import { createResultant, getAllResultants } from "../../controllers/restaurants";
+import {
+  createResultant,
+  getAllResultants,
+} from "../../controllers/restaurants";
 import { adminRole, isAuthenticated } from "../../middleware/auth";
+import { createValidator } from "express-joi-validation";
+import Joi from "joi";
 
 const router = Router();
+const validator = createValidator({});
 
-router.post("/create", isAuthenticated, adminRole("admin"), createResultant);
+const restaurantSchema = Joi.object({
+  name: Joi.string().min(20).max(100).required(),
+  short_description: Joi.string().min(50).max(250).required(),
+  image: Joi.string().required(),
+  lat: Joi.number().required(),
+  long: Joi.number().required(),
+  address: Joi.string().min(5).required(),
+  rating: Joi.number().required(),
+  categories: Joi.array(),
+  dishes: Joi.array(),
+});
+
+router.post(
+  "/create",
+  validator.body(restaurantSchema),
+  isAuthenticated,
+  adminRole("admin"),
+  createResultant
+);
 router.get("/resultants", isAuthenticated, getAllResultants);
 
 export default router;
