@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createDish } from "../../controllers/dish";
+import { createDish, deleteDish, updateDish } from "../../controllers/dish";
 import { adminRole, isAuthenticated } from "../../middleware/auth";
 import { createValidator } from "express-joi-validation";
 import Joi from "joi";
@@ -21,5 +21,8 @@ router.post(
   adminRole("admin"),
   createDish
 );
+
+router.put("/update/:id", isAuthenticated, adminRole("admin"), updateDish);
+router.put("/delete/:id", isAuthenticated, adminRole("admin"), deleteDish);
 
 export default router;

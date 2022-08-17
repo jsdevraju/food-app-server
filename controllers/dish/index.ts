@@ -11,7 +11,7 @@ export const createDish = catchAsyncError(async (req: Request, res: Response, ne
     });
 })
 
-export const updateResultant = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+export const updateDish = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     const resultant = await Dish.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true,
@@ -26,7 +26,7 @@ export const updateResultant = catchAsyncError(async (req: Request, res: Respons
     });
 })
 
-export const deleteResultant = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+export const deleteDish = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     const resultant = await Dish.findByIdAndDelete(req.params.id);
     if (!resultant) {
         return next(new ErrorHandler("Resultant not found", 404));
