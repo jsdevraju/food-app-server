@@ -28,6 +28,7 @@ import auth from './routes/auth'
 import categories from './routes/categories'
 import resultant from './routes/restaurant'
 import dish from './routes/dish'
+import featured from './routes/featured'
 
 
 // Routes Middleware
@@ -35,6 +36,7 @@ app.use("/api/v1/auth", auth);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/resultant", resultant);
 app.use("/api/v1/dish", dish);
+app.use("/api/v1/featured", featured);
 
 // Middleware Error Handler
 app.use(errorHandler);
