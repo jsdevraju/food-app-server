@@ -9,7 +9,18 @@ export const createFeatured = catchAsyncError(async (req: Request, res: Response
         success: true,
         data: restaurant
     });
-})
+});
+
+export const getSingleFeatured = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
+    const featured = await Featured.findById(req.params.id);
+    if (!featured) {
+        return next(new ErrorHandler('Restaurant not found', 404));
+    }
+    res.status(200).json({
+        success: true,
+        data: featured
+    });
+});
 
 export const getAllFeatured = catchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
     const featured = await Featured.find({}).populate({
