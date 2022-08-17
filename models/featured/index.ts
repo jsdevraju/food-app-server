@@ -9,10 +9,12 @@ const featuredSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    restaurants:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Restaurants",
-    }
+    restaurants:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Restaurants",
+        }
+    ]
 })
 
 export default mongoose.model("Featured", featuredSchema);

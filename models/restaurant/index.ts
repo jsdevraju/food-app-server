@@ -29,14 +29,18 @@ const restaurantsSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    categories:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Categories",
-    },
-    dishes:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Dish",
-    }
+    categories:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Categories",
+        }
+    ],
+    dishes:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Dish",
+        }
+    ]
 
 })
 

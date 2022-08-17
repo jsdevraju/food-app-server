@@ -3,9 +3,9 @@ import { Request, Response, NextFunction } from "express";
 import catchAsyncError from "../../middleware/catchAsyncError";
 import ErrorHandler from "../../utils/errorHandler";
 
-
 export const createCategory = catchAsyncError(async(req:Request, res:Response, next:NextFunction) => {
     const category = await Categories.create(req.body);
+    
     res.status(201).json({
         success: true,
         category

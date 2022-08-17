@@ -26,11 +26,15 @@ app.get("/", (req: Request, res: Response) => {
 // Routes
 import auth from './routes/auth'
 import categories from './routes/categories'
+import resultant from './routes/restaurant'
+import dish from './routes/dish'
 
 
 // Routes Middleware
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/categories", categories);
+app.use("/api/v1/resultant", resultant);
+app.use("/api/v1/dish", dish);
 
 // Middleware Error Handler
 app.use(errorHandler);
