@@ -1,7 +1,10 @@
 import { Router } from "express";
 import {
-  createResultant,
-  getAllResultants,
+  createRestaurant,
+  deleteRestaurant,
+  getAllRestaurants,
+  getRestaurant,
+  updateRestaurant,
 } from "../../controllers/restaurants";
 import { adminRole, isAuthenticated } from "../../middleware/auth";
 import { createValidator } from "express-joi-validation";
@@ -27,8 +30,11 @@ router.post(
   validator.body(restaurantSchema),
   isAuthenticated,
   adminRole("admin"),
-  createResultant
+  createRestaurant
 );
-router.get("/resultants", isAuthenticated, getAllResultants);
+router.get("/restaurant", isAuthenticated, getAllRestaurants);
+router.get("/restaurant/:id", isAuthenticated, getRestaurant);
+router.put("/restaurant/:id", isAuthenticated, updateRestaurant);
+router.delete("/restaurant/:id", isAuthenticated, deleteRestaurant);
 
 export default router;
